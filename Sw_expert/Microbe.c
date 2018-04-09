@@ -19,6 +19,9 @@ int main() {
 	int testcase;
 	int i, j, k;
 	int sum;
+	int tmp;
+	int max;
+	int idx;
 	freopen("input.txt", "r", stdin);
 
 	scanf("%d", &testcase);
@@ -27,6 +30,7 @@ int main() {
 	for (i = 0; i < testcase; i++) {
 		cnt = 0;
 		sum = 0;
+		
 		scanf("%d %d %d", &N, &M, &K);
 
 		for (j = 0; j < K; j++) {
@@ -69,25 +73,52 @@ int main() {
 					}
 				}
 			}
-
+			
+			
 			for (j = 0; j < K; j++) {
-				for (k = 0; k < K; k++) {
-					if (j != k && info[j][NUM] > 0 && info[k][NUM] > 0) {
+				max = 0;
+				tmp = 0;
+				idx = -1;
+				for (k = j+1; k < K; k++) {
+					if (info[j][NUM] > 0 && info[k][NUM] > 0) {
 						if (info[j][X] == info[k][X] && info[j][Y] == info[k][Y]) {
 							if (info[k][NUM] > info[j][NUM]) {
-								info[k][NUM] += info[j][NUM];
-								info[j][NUM] = 0;
+								if (max < info[k][NUM]) {
+									idx = k;
+									max = info[k][NUM];
+								}
+								else if(max > info[k][NUM]){
+								}
+								else;
+							}
+							else {
+								if (max < info[j][NUM]) {
+									idx = j;
+									max = info[j][NUM];
+								}
+							}
+						}
+					}	
+				}
+				if (idx == -1);
+				else{
+					for (k = j; k < K; k++) {
+						if (info[k][NUM] > 0 && info[j][X] == info[k][X] && info[j][Y] == info[k][Y]) {
+							if (info[k][NUM] != max){
+								tmp += info[k][NUM];
+								info[k][NUM] = 0;
 							}
 						}
 					}
-				}
+					info[idx][NUM] += tmp;
+				}	
 			}
-
 			cnt++;
 		}
 
 		for (j = 0; j < K; j++) {
-			sum += info[j][NUM];
+			if (info[j][NUM] > 0) 
+				sum += info[j][NUM];
 		}
 
 		printf("#%d %d\n", i + 1, sum);
